@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">Project1</string>
 
-    <string name="intro_button_string">Введение</string>
+    <string name="intro_button_string">Заполните поля</string>
+    <string name="intro_button1_string">E-mail</string>
+    <string name="intro_button2_string">Пароль</string>
+    <string name="intro_button3_string">Авторизация</string>
+    <string name="intro_button4_string">Регистрация</string>
 </resources>
