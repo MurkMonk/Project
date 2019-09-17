@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.assist.AssistStructure;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -15,12 +16,14 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
 
     private EditText ETemail;
     private EditText ETpassword;
+
+    private boolean auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +31,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         mAuth = FirebaseAuth.getInstance();
+        auth = false;
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -53,12 +57,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
-        if(view.getId() == R.id.button2)
-        {
-            signin(ETemail.getText().toString(),ETpassword.getText().toString());
-        }else if(view.getId() == R.id.button)
-        {
-            registration(ETemail.getText().toString(),ETpassword.getText().toString());
+        if (view.getId() == R.id.button2) {
+            signin(ETemail.getText().toString(), ETpassword.getText().toString());
+            if (auth) {
+                Intent intent = new Intent(this, ActivityTwo.class);
+                startActivity(intent);
+            }
+
+        } else if (view.getId() == R.id.button) {
+            registration(ETemail.getText().toString(), ETpassword.getText().toString());
         }
     }
 
@@ -66,26 +73,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-                if(task.isSuccessful()) {
+                if (task.isSuccessful()) {
                     Toast.makeText(MainActivity.this, "Авторизация успешна", Toast.LENGTH_SHORT).show();
-                }else
+                    auth = true;
+                } else
                     Toast.makeText(MainActivity.this, "Авторизация провалена", Toast.LENGTH_SHORT).show();
             }
         });
     }
-    public void registration(String email, String password){
+
+    public void registration(String email, String password) {
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-                if(task.isSuccessful())
-                {
+                if (task.isSuccessful()) {
                     Toast.makeText(MainActivity.this, "Регистрация успешна", Toast.LENGTH_SHORT).show();
-                }
-                else
+                } else
                     Toast.makeText(MainActivity.this, "Регистрация провалена", Toast.LENGTH_SHORT).show();
             }
         });
+
     }
+
 }
 
 

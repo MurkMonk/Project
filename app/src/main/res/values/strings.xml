@@ -6,4 +6,5 @@
     <string name="intro_button2_string">Пароль</string>
     <string name="intro_button3_string">Авторизация</string>
     <string name="intro_button4_string">Регистрация</string>
+
 </resources>
